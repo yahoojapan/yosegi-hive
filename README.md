@@ -13,9 +13,9 @@
 -->
 
 # Yosegi Hive
-This plugin supports Yosegi files with Apache Hive.
+This is [Yosegi](https://github.com/yahoojapan/yosegi) plugin.
 
-It supports reading and writing through Hive's interface.
+Supports writing and reading data in [Apache Hive](https://hive.apache.org/).
 
 # License
 This project is on the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
@@ -23,7 +23,7 @@ Please treat this project under this license.
 
 # How do I get started?
 
-For easy usage please read quickstart.
+For easy usage please read [quick start](docs/quickstart.md).
 
 For more detailed usage, please read the usage documentation.
 
