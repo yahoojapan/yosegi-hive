@@ -23,7 +23,7 @@ Please refer to the following for the command of Hive.
 ```
 add jar /tmp/yosegi.jar;
 add jar /tmp/yosegi-hive.jar;
-``
+```
 
 ## Preparation of input data and create Hive table
 In this example, CSV data is assumed to be input data.
