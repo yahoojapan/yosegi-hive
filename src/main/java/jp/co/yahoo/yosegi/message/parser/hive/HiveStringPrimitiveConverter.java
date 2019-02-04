@@ -42,11 +42,9 @@ public class HiveStringPrimitiveConverter implements IHivePrimitiveConverter {
       return NullObj.getInstance();
     }
     Text text = inspector.getPrimitiveWritableObject( target );
-    if ( text.getLength() == text.getBytes().length ) {
-      return new BytesStringObj( text.getBytes() );
-    } else {
-      return new BytesStringObj( text.getBytes() , 0 , text.getLength() );
-    }
+    byte[] data = new byte[text.getLength() ];
+    System.arraycopy( text.getBytes() , 0 , data , 0 , data.length );
+    return new BytesStringObj( data );
   }
 
 }
