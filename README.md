@@ -30,6 +30,8 @@ For more detailed usage, please read the [usage documentation](docs/how_to_use.m
 # How to contribute
 We welcome to join this project widely.
 
+For information on how to start contributing to the project, please refer to the [Yosegi contribution guide](https://github.com/yahoojapan/yosegi/blob/master/CONTRIBUTING.md).
+
 ## Maven
 Yosegi Hive sources can get from the Maven repository.
 
