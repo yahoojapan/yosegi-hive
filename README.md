@@ -25,7 +25,7 @@ Please treat this project under this license.
 
 For easy usage please read [quick start](docs/quickstart.md).
 
-For more detailed usage, please read the usage documentation.
+For more detailed usage, please read the [usage documentation](docs/how_to_use.md).
 
 # How to contribute
 We welcome to join this project widely.

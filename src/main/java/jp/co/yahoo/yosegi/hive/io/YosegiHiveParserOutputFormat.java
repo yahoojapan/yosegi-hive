@@ -77,6 +77,10 @@ public class YosegiHiveParserOutputFormat extends FileOutputFormat<NullWritable,
       String compressionClass = tableProperties.getProperty( "yosegi.compression.class" );
       config.set( "spread.column.maker.default.compress.class" , compressionClass );
     }
+    if ( tableProperties.containsKey( "yosegi.compress.optimize.allowed.ratio" ) ) {
+      String allowedRatio = tableProperties.getProperty( "yosegi.compress.optimize.allowed.ratio" );
+      config.set( "compress.optimize.allowed.ratio" , allowedRatio );
+    }
     FileSystem fs = outputPath.getFileSystem( job );
     long dfsBlockSize = Math.max( fs.getDefaultBlockSize( outputPath ) , 1024 * 1024 * 256 );
     OutputStream out = fs.create(
