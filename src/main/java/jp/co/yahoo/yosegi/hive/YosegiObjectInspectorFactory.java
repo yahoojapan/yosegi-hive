@@ -58,6 +58,8 @@ public final class YosegiObjectInspectorFactory {
         switch ( primitiveTypeInfo.getPrimitiveCategory() ) {
           case STRING:
             return PrimitiveObjectInspectorFactory.writableStringObjectInspector;
+          case CHAR:
+            return PrimitiveObjectInspectorFactory.writableHiveCharObjectInspector;
           case BINARY:
             return PrimitiveObjectInspectorFactory.writableBinaryObjectInspector;
           case BOOLEAN:
