@@ -62,7 +62,7 @@ The defined fields need not be included in the data. Fields not included in the 
 | Type       | Supported    |
 |:-----------|:------------:|
 |STRING|**true**|
-|VARCHAR|**false**|
+|VARCHAR|**true**|
 |CHAR|**true**|
 
 ### Misc Types

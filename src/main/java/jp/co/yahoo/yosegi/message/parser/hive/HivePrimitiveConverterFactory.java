@@ -27,6 +27,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.DateObjectInspect
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.DoubleObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.FloatObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.HiveCharObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.primitive.HiveVarcharObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.IntObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.LongObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.ShortObjectInspector;
@@ -68,6 +69,8 @@ public class HivePrimitiveConverterFactory {
             return new HiveTimestampPrimitiveConverter( (TimestampObjectInspector)objectInspector );
           case DATE:
             return new HiveDatePrimitiveConverter( (DateObjectInspector)objectInspector );
+          case VARCHAR:
+            return new HiveVarcharPrimitiveConverter( (HiveVarcharObjectInspector)objectInspector );
           case VOID:
           case UNKNOWN:
           default:

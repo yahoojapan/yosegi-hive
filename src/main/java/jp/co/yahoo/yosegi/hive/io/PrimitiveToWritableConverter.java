@@ -25,6 +25,7 @@ import org.apache.hadoop.hive.serde2.io.ByteWritable;
 import org.apache.hadoop.hive.serde2.io.DateWritable;
 import org.apache.hadoop.hive.serde2.io.DoubleWritable;
 import org.apache.hadoop.hive.serde2.io.HiveCharWritable;
+import org.apache.hadoop.hive.serde2.io.HiveVarcharWritable;
 import org.apache.hadoop.hive.serde2.io.ShortWritable;
 import org.apache.hadoop.hive.serde2.io.TimestampWritable;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
@@ -71,6 +72,10 @@ public final class PrimitiveToWritableConverter {
         HiveCharWritable charResult = new HiveCharWritable();
         charResult.set( primitiveObject.getString() );
         return charResult;
+      case VARCHAR:
+        HiveVarcharWritable varcharResult = new HiveVarcharWritable();
+        varcharResult.set( primitiveObject.getString() );
+        return varcharResult;
       case BINARY:
         BytesWritable bytesResult = new BytesWritable();
         byte[] bytes = primitiveObject.getBytes();

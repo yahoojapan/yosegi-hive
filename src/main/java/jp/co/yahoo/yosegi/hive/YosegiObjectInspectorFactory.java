@@ -60,6 +60,8 @@ public final class YosegiObjectInspectorFactory {
             return PrimitiveObjectInspectorFactory.writableStringObjectInspector;
           case CHAR:
             return PrimitiveObjectInspectorFactory.writableHiveCharObjectInspector;
+          case VARCHAR:
+            return PrimitiveObjectInspectorFactory.writableHiveVarcharObjectInspector;
           case BINARY:
             return PrimitiveObjectInspectorFactory.writableBinaryObjectInspector;
           case BOOLEAN:
