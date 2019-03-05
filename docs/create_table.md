@@ -17,7 +17,7 @@
 See the [quick start](quickstart.md) for the procedure up to creating the table.
 
 As with JSON, Yosegi maps fields and columns by name.
-The defined fields need not be included in the data. Fields not included in the data are NULL.
+Yosegi treats the fields that have not been appeared in the data as NULL when user access them.
 
 ## Configuration and TBLPROPERTIES
 
@@ -80,14 +80,13 @@ The defined fields need not be included in the data. Fields not included in the 
 |UNION|**true**|
 
 ## Cast of type
-If the defined type is different from the data type, cast as much as possible.
-If it can not be done, it is NULL.
+Yosegi execute data type casting when there is a difference between two data types, one is from estimated based on input data, and the table defines the other. If Yosegi cannot data type casting, it treats the data as NULL.
 
 ## Compression class
 Please see the list of supported compression formats.
 
 ## Make complicated data correspond to vectorization
-Hive does not work on complex schema tables in vectorization and pushdown in some cases.
-Data handled by Hive can be processed efficiently by using a flat schema, but it is not always possible to define a flat schema for data design.
+Hive cannot work on complex schema tables in vectorization and pushdown in some cases.
+Hive can handle efficiently the data that is defined by a flat schema. However, it is not always possible to use a flat schema for data design.
 
-In Yosegi, it is possible to process complicated schemas as a flat schema by changing array expansion and node configuration.
+On the other hand, Yosegi can change complex schemas as a flat schema using array expansion and node configuration.
