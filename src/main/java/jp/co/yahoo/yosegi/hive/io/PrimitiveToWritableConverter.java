@@ -24,6 +24,7 @@ import jp.co.yahoo.yosegi.spread.column.ICell;
 import org.apache.hadoop.hive.serde2.io.ByteWritable;
 import org.apache.hadoop.hive.serde2.io.DoubleWritable;
 import org.apache.hadoop.hive.serde2.io.ShortWritable;
+import org.apache.hadoop.hive.serde2.io.TimestampWritable;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
 import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.BytesWritable;
@@ -34,6 +35,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 public final class PrimitiveToWritableConverter {
 
@@ -119,9 +121,16 @@ public final class PrimitiveToWritableConverter {
           return null;
         }
         return doubleResult;
+      case TIMESTAMP:
+        TimestampWritable timestampResult = new TimestampWritable();
+        try {
+          timestampResult.set( new Timestamp( primitiveObject.getLong() ) );
+        } catch ( NumberFormatException | NullPointerException ex ) {
+          return null;
+        }
+        return timestampResult;
       case DATE:
       case DECIMAL:
-      case TIMESTAMP:
       case VOID:
       default:
         throw new UnsupportedOperationException( "Unknown category " + primitiveCategory );

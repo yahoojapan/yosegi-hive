@@ -112,11 +112,8 @@ public class TestYosegiObjectInspectorFactory{
 
   @Test
   public void T_craeteObjectInspectorFromTypeInfo_12(){
-    assertThrows( UnsupportedOperationException.class ,
-      () -> {
-        ObjectInspector oi = YosegiObjectInspectorFactory.craeteObjectInspectorFromTypeInfo( TypeInfoFactory.timestampTypeInfo );
-      }
-    );
+    ObjectInspector oi = YosegiObjectInspectorFactory.craeteObjectInspectorFromTypeInfo( TypeInfoFactory.timestampTypeInfo );
+    assertTrue( oi instanceof TimestampObjectInspector );
   }
 
   @Test

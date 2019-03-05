@@ -54,7 +54,7 @@ The defined fields need not be included in the data. Fields not included in the 
 ### Date/Time Types
 | Type       | Supported    |
 |:-----------|:------------:|
-|TIMESTAMP|**false**|
+|TIMESTAMP|**true**|
 |DATE|**false**|
 |INTERVAL|**false**|
 

@@ -74,10 +74,11 @@ public final class YosegiObjectInspectorFactory {
             return PrimitiveObjectInspectorFactory.writableLongObjectInspector;
           case SHORT:
             return PrimitiveObjectInspectorFactory.writableShortObjectInspector;
+          case TIMESTAMP:
+            return PrimitiveObjectInspectorFactory.writableTimestampObjectInspector;
 
           case DATE:
           case DECIMAL:
-          case TIMESTAMP:
           case VOID:
           default:
             throw new UnsupportedOperationException(
