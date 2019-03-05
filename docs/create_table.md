@@ -55,7 +55,7 @@ The defined fields need not be included in the data. Fields not included in the 
 | Type       | Supported    |
 |:-----------|:------------:|
 |TIMESTAMP|**true**|
-|DATE|**false**|
+|DATE|**true**|
 |INTERVAL|**false**|
 
 ### String Types

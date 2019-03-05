@@ -22,6 +22,7 @@ import jp.co.yahoo.yosegi.message.objects.IBytesLink;
 import jp.co.yahoo.yosegi.message.objects.PrimitiveObject;
 import jp.co.yahoo.yosegi.spread.column.ICell;
 import org.apache.hadoop.hive.serde2.io.ByteWritable;
+import org.apache.hadoop.hive.serde2.io.DateWritable;
 import org.apache.hadoop.hive.serde2.io.DoubleWritable;
 import org.apache.hadoop.hive.serde2.io.ShortWritable;
 import org.apache.hadoop.hive.serde2.io.TimestampWritable;
@@ -35,6 +36,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public final class PrimitiveToWritableConverter {
@@ -130,6 +132,13 @@ public final class PrimitiveToWritableConverter {
         }
         return timestampResult;
       case DATE:
+        DateWritable dateResult = new DateWritable();
+        try {
+          dateResult.set( new Date( primitiveObject.getLong() ) );
+        } catch ( NumberFormatException | NullPointerException ex ) {
+          return null;
+        }
+        return dateResult;
       case DECIMAL:
       case VOID:
       default:

@@ -76,8 +76,9 @@ public final class YosegiObjectInspectorFactory {
             return PrimitiveObjectInspectorFactory.writableShortObjectInspector;
           case TIMESTAMP:
             return PrimitiveObjectInspectorFactory.writableTimestampObjectInspector;
-
           case DATE:
+            return PrimitiveObjectInspectorFactory.writableDateObjectInspector;
+
           case DECIMAL:
           case VOID:
           default:
