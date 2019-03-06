@@ -80,7 +80,7 @@ Yosegi treats the fields that have not been appeared in the data as NULL when us
 |UNION|**true**|
 
 ## Cast of type
-Yosegi execute data type casting when there is a difference between two data types, one is from estimated based on input data, and the table defines the other. If Yosegi cannot data type casting, it treats the data as NULL.
+Yosegi tries to cast data type to request one that is different from the estimated one based on input data. If Yosegi fails to change the data type, it treats the data as NULL.
 
 ## Compression class
 Please see the list of supported compression formats.
