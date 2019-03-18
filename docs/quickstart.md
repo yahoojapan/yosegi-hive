@@ -42,7 +42,7 @@ add jar /tmp/yosegi-hive.jar;
 In this example, CSV data is assumed to be input data.
 With this data as input, we create a table in Yosegi format and read data from the table.
 
-Create the following csv file.In this example, to illustrate writing to and reading from the table, the data is a simple example.
+Create the following CSV file. Following example is for illustrating to write and read simple data from the table.
 If you already have a table, you still have the input.
 
 ```
@@ -105,4 +105,4 @@ X_0006  FFF     21
 ```
 
 # What if I want to know more?
-
+Please read the usage [summary page](how_to_use.md).
