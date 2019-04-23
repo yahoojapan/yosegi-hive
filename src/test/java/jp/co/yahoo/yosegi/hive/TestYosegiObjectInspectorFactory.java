@@ -58,8 +58,11 @@ public class TestYosegiObjectInspectorFactory{
 
   @Test
   public void T_craeteObjectInspectorFromTypeInfo_4(){
-    ObjectInspector oi = YosegiObjectInspectorFactory.craeteObjectInspectorFromTypeInfo( TypeInfoFactory.dateTypeInfo );
-    assertTrue( oi instanceof DateObjectInspector );
+    assertThrows( UnsupportedOperationException.class ,
+      () -> {
+        ObjectInspector oi = YosegiObjectInspectorFactory.craeteObjectInspectorFromTypeInfo( TypeInfoFactory.dateTypeInfo );
+      }
+    );
   }
 
   @Test
@@ -109,8 +112,11 @@ public class TestYosegiObjectInspectorFactory{
 
   @Test
   public void T_craeteObjectInspectorFromTypeInfo_12(){
-    ObjectInspector oi = YosegiObjectInspectorFactory.craeteObjectInspectorFromTypeInfo( TypeInfoFactory.timestampTypeInfo );
-    assertTrue( oi instanceof TimestampObjectInspector );
+    assertThrows( UnsupportedOperationException.class ,
+      () -> {
+        ObjectInspector oi = YosegiObjectInspectorFactory.craeteObjectInspectorFromTypeInfo( TypeInfoFactory.timestampTypeInfo );
+      }
+    );
   }
 
   @Test

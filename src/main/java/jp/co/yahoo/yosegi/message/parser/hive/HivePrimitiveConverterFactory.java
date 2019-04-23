@@ -23,16 +23,12 @@ import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.BinaryObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.BooleanObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.ByteObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.DateObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.DoubleObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.FloatObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.HiveCharObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.HiveVarcharObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.IntObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.LongObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.ShortObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.StringObjectInspector;
-import org.apache.hadoop.hive.serde2.objectinspector.primitive.TimestampObjectInspector;
 
 public class HivePrimitiveConverterFactory {
 
@@ -51,8 +47,6 @@ public class HivePrimitiveConverterFactory {
             return new HiveBooleanPrimitiveConverter( (BooleanObjectInspector)objectInspector );
           case BYTE:
             return new HiveBytePrimitiveConverter( (ByteObjectInspector)objectInspector );
-          case CHAR:
-            return new HiveCharPrimitiveConverter( (HiveCharObjectInspector)objectInspector );
           case DOUBLE:
             return new HiveDoublePrimitiveConverter( (DoubleObjectInspector)objectInspector );
           case FLOAT:
@@ -65,12 +59,8 @@ public class HivePrimitiveConverterFactory {
             return new HiveShortPrimitiveConverter( (ShortObjectInspector)objectInspector );
           case STRING:
             return new HiveStringPrimitiveConverter( (StringObjectInspector)objectInspector );
-          case TIMESTAMP:
-            return new HiveTimestampPrimitiveConverter( (TimestampObjectInspector)objectInspector );
           case DATE:
-            return new HiveDatePrimitiveConverter( (DateObjectInspector)objectInspector );
-          case VARCHAR:
-            return new HiveVarcharPrimitiveConverter( (HiveVarcharObjectInspector)objectInspector );
+          case TIMESTAMP:
           case VOID:
           case UNKNOWN:
           default:
