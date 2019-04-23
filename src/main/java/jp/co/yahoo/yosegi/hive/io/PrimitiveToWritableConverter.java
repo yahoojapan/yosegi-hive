@@ -22,8 +22,12 @@ import jp.co.yahoo.yosegi.message.objects.IBytesLink;
 import jp.co.yahoo.yosegi.message.objects.PrimitiveObject;
 import jp.co.yahoo.yosegi.spread.column.ICell;
 import org.apache.hadoop.hive.serde2.io.ByteWritable;
+import org.apache.hadoop.hive.serde2.io.DateWritable;
 import org.apache.hadoop.hive.serde2.io.DoubleWritable;
+import org.apache.hadoop.hive.serde2.io.HiveCharWritable;
+import org.apache.hadoop.hive.serde2.io.HiveVarcharWritable;
 import org.apache.hadoop.hive.serde2.io.ShortWritable;
+import org.apache.hadoop.hive.serde2.io.TimestampWritable;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector.PrimitiveCategory;
 import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.BytesWritable;
@@ -34,6 +38,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 public final class PrimitiveToWritableConverter {
 
@@ -62,6 +68,14 @@ public final class PrimitiveToWritableConverter {
           textResult.set( strBytes , 0 , strBytes.length );
         }
         return textResult;
+      case CHAR:
+        HiveCharWritable charResult = new HiveCharWritable();
+        charResult.set( primitiveObject.getString() );
+        return charResult;
+      case VARCHAR:
+        HiveVarcharWritable varcharResult = new HiveVarcharWritable();
+        varcharResult.set( primitiveObject.getString() );
+        return varcharResult;
       case BINARY:
         BytesWritable bytesResult = new BytesWritable();
         byte[] bytes = primitiveObject.getBytes();
@@ -119,9 +133,23 @@ public final class PrimitiveToWritableConverter {
           return null;
         }
         return doubleResult;
-      case DATE:
-      case DECIMAL:
       case TIMESTAMP:
+        TimestampWritable timestampResult = new TimestampWritable();
+        try {
+          timestampResult.set( new Timestamp( primitiveObject.getLong() ) );
+        } catch ( NumberFormatException | NullPointerException ex ) {
+          return null;
+        }
+        return timestampResult;
+      case DATE:
+        DateWritable dateResult = new DateWritable();
+        try {
+          dateResult.set( new Date( primitiveObject.getLong() ) );
+        } catch ( NumberFormatException | NullPointerException ex ) {
+          return null;
+        }
+        return dateResult;
+      case DECIMAL:
       case VOID:
       default:
         throw new UnsupportedOperationException( "Unknown category " + primitiveCategory );

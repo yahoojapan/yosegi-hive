@@ -54,16 +54,16 @@ Yosegi treats the fields that have not been appeared in the data as NULL when us
 ### Date/Time Types
 | Type       | Supported    |
 |:-----------|:------------:|
-|TIMESTAMP|**false**|
-|DATE|**false**|
+|TIMESTAMP|**true**|
+|DATE|**true**|
 |INTERVAL|**false**|
 
 ### String Types
 | Type       | Supported    |
 |:-----------|:------------:|
 |STRING|**true**|
-|VARCHAR|**false**|
-|CHAR|**false**|
+|VARCHAR|**true**|
+|CHAR|**true**|
 
 ### Misc Types
 | Type       | Supported    |
