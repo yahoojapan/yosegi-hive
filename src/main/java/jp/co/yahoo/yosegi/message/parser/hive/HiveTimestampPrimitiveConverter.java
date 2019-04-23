@@ -39,7 +39,7 @@ public class HiveTimestampPrimitiveConverter implements IHivePrimitiveConverter 
     if ( target == null ) {
       return NullObj.getInstance();
     }
-    return new LongObj( inspector.getPrimitiveJavaObject( target ).getTime() );
+    return new LongObj( inspector.getPrimitiveJavaObject( target ).toEpochMilli() );
   }
 
 }
