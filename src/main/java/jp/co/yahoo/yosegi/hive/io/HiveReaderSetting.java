@@ -110,7 +110,7 @@ public class HiveReaderSetting implements IReaderSetting {
     config.set( "spread.reader.read.column.names" , createReadColumnNames(
         job.get( ColumnProjectionUtils.READ_COLUMN_NAMES_CONF_STR , null ) ) );
 
-    isVectorModeFlag = Utilities.getUseVectorizedInputFileFormat( job );
+    isVectorModeFlag = Utilities.getIsVectorized( job );
   }
 
   /**
