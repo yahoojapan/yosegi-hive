@@ -21,6 +21,7 @@ package jp.co.yahoo.yosegi.hive.io;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.ql.exec.vector.VectorizedInputFormatInterface;
+import org.apache.hadoop.hive.ql.exec.vector.VectorizedSupport;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.FileSplit;
@@ -69,6 +70,11 @@ public class YosegiHiveLineInputFormat extends FileInputFormat<NullWritable,Colu
       return new YosegiHiveLineReader(
           in , fileLength , start , length , hiveConfig , jobReporter , spreadCounter );
     }
+  }
+
+  @Override
+  public VectorizedSupport.Support[] getSupportedFeatures() {
+    return null;
   }
 
 }
