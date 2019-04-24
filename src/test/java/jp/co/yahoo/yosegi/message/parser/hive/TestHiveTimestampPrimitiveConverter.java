@@ -25,14 +25,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.Arguments;
 
-import org.apache.hadoop.hive.serde2.io.TimestampWritable;
+import org.apache.hadoop.hive.common.type.Timestamp;
+import org.apache.hadoop.hive.serde2.io.TimestampWritableV2;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
 
 import jp.co.yahoo.yosegi.message.objects.NullObj;
 import jp.co.yahoo.yosegi.message.objects.PrimitiveObject;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
 public class TestHiveTimestampPrimitiveConverter {
 
@@ -42,7 +42,7 @@ public class TestHiveTimestampPrimitiveConverter {
         PrimitiveObjectInspectorFactory.writableTimestampObjectInspector );
 
     long t = 1551756114L;
-    TimestampWritable timestamp = new TimestampWritable( new Timestamp( t ) );
+    TimestampWritableV2 timestamp = new TimestampWritableV2( Timestamp.ofEpochMilli( t ) );
     PrimitiveObject tObj = converter.get( timestamp );
     assertEquals( t , tObj.getLong() );
   }
