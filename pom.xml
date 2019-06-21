@@ -16,7 +16,7 @@
 
   <groupId>jp.co.yahoo.yosegi</groupId>
   <artifactId>yosegi-hive</artifactId>
-  <version>0.9.0</version>
+  <version>0.9.1_hive-1.2.1000.2.6.4.0-91</version>
   <packaging>jar</packaging>
   <name>Yosegi Hive</name>
   <description>Yosegi Hive library.</description>
@@ -66,6 +66,17 @@
     <spotbugs-maven-plugin.version>3.1.8</spotbugs-maven-plugin.version>
     <spotbugs.version>3.1.9</spotbugs.version>
   </properties>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 
   <dependencies>
     <dependency>
