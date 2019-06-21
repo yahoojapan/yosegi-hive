@@ -267,8 +267,11 @@ public class YosegiStructObjectInspector extends SettableStructObjectInspector {
 
   @Override
   public List<Object> getStructFieldsDataAsList( final Object object ) {
-    ColumnAndIndex columnAndIndex = (ColumnAndIndex) object;
+    if ( object instanceof List ) {
+      return (List<Object>) object;
+    }
 
+    ColumnAndIndex columnAndIndex = (ColumnAndIndex) object;
     List<Object> result = new ArrayList<Object>( fields.size() );
     for ( StructField field : fields ) {
       YosegiStructField structFiled = (YosegiStructField)field;
