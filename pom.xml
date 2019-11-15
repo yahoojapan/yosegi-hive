@@ -16,7 +16,7 @@
 
   <groupId>jp.co.yahoo.yosegi</groupId>
   <artifactId>yosegi-hive</artifactId>
-  <version>0.9.2_hive-1.2.1000.2.6.4.0-91</version>
+  <version>0.9.3_hive-1.2.1000.2.6.4.0-91</version>
   <packaging>jar</packaging>
   <name>Yosegi Hive</name>
   <description>Yosegi Hive library.</description>
