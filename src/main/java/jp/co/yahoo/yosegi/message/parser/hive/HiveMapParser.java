@@ -44,9 +44,9 @@ public class HiveMapParser implements IHiveParser {
   public HiveMapParser( final MapObjectInspector mapObjectInspector ) {
     IHivePrimitiveConverter keyConverter = HivePrimitiveConverterFactory.get(
         mapObjectInspector.getMapKeyObjectInspector() );
-    if ( keyConverter instanceof HiveStringPrimitiveConverter ) {
+    if ( ! ( keyConverter instanceof HiveStringPrimitiveConverter ) ) {
       throw new UnsupportedOperationException(
-          "Map type key only supports String type." );
+          "Map type key only supports String type : " + keyConverter.getClass().getName() );
     }
 
     this.mapObjectInspector = mapObjectInspector;
@@ -81,8 +81,12 @@ public class HiveMapParser implements IHiveParser {
 
   @Override
   public IParser getParser( final String key ) throws IOException {
+    Object childRow = mapObjectInspector.getMapValueElement( row , keyMapping.get( key ) );
+    if ( childRow == null ) {
+      return new HiveNullParser();
+    }
     IHiveParser childParser =  HiveParserFactory.get( childObjectInspector );
-    childParser.setObject( mapObjectInspector.getMapValueElement( row , keyMapping.get( key ) ) );
+    childParser.setObject( childRow );
     return childParser;
   }
 
