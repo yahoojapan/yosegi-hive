@@ -35,12 +35,20 @@ public class HiveMapParser implements IHiveParser {
   private final ObjectInspector childObjectInspector;
   private final IHivePrimitiveConverter childConverter;
   private final boolean childHasParser;
+  private Map<String,Object> keyMapping = new HashMap<String,Object>();
   private Object row;
 
   /**
    * Initialize map information set.
    */
   public HiveMapParser( final MapObjectInspector mapObjectInspector ) {
+    IHivePrimitiveConverter keyConverter = HivePrimitiveConverterFactory.get(
+        mapObjectInspector.getMapKeyObjectInspector() );
+    if ( ! ( keyConverter instanceof HiveStringPrimitiveConverter ) ) {
+      throw new UnsupportedOperationException(
+          "Map type key only supports String type : " + keyConverter.getClass().getName() );
+    }
+
     this.mapObjectInspector = mapObjectInspector;
     childObjectInspector = mapObjectInspector.getMapValueObjectInspector();
     childConverter = HivePrimitiveConverterFactory.get( childObjectInspector );
@@ -51,11 +59,19 @@ public class HiveMapParser implements IHiveParser {
   @Override
   public void setObject( final Object row ) throws IOException {
     this.row = row;
+    keyMapping.clear();
+    Map<?,?> map = mapObjectInspector.getMap( row );
+    Iterator<?> keyIterator = map.keySet().iterator();
+    while ( keyIterator.hasNext() ) {
+      Object keyObj = keyIterator.next();
+      keyMapping.put( keyObj.toString() , keyObj );
+    }
   }
 
   @Override
   public PrimitiveObject get(final String key ) throws IOException {
-    return childConverter.get( mapObjectInspector.getMapValueElement( row , new Text( key ) ) );
+    return childConverter.get(
+        mapObjectInspector.getMapValueElement( row , keyMapping.get( key ) ) );
   }
 
   @Override
@@ -65,8 +81,12 @@ public class HiveMapParser implements IHiveParser {
 
   @Override
   public IParser getParser( final String key ) throws IOException {
+    Object childRow = mapObjectInspector.getMapValueElement( row , keyMapping.get( key ) );
+    if ( childRow == null ) {
+      return new HiveNullParser();
+    }
     IHiveParser childParser =  HiveParserFactory.get( childObjectInspector );
-    childParser.setObject( mapObjectInspector.getMapValueElement( row , new Text( key ) ) );
+    childParser.setObject( childRow );
     return childParser;
   }
 
@@ -77,14 +97,12 @@ public class HiveMapParser implements IHiveParser {
 
   @Override
   public String[] getAllKey() throws IOException {
-    Map<?,?> map = mapObjectInspector.getMap( row );
+    String[] keys = new String[keyMapping.size()];
 
-    String[] keys = new String[map.size()];
-
-    Iterator<?> keyIterator = map.keySet().iterator();
+    Iterator<String> keyIterator = keyMapping.keySet().iterator();
     int index = 0;
     while ( keyIterator.hasNext() ) {
-      keys[index] = keyIterator.next().toString();
+      keys[index] = keyIterator.next();
       index++;
     }
 
