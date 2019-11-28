@@ -90,9 +90,13 @@ public class HiveStructParser implements IHiveParser {
 
   @Override
   public IParser getParser( final int index ) throws IOException {
+    Object childRow = inspector.getStructFieldData( row, fieldList.get( index ) );
+    if ( childRow == null ) {
+      return new HiveNullParser();
+    }
     IHiveParser childParser =
         HiveParserFactory.get( fieldList.get( index ).getFieldObjectInspector() );
-    childParser.setObject( inspector.getStructFieldData( row, fieldList.get( index ) ) );
+    childParser.setObject( childRow );
     return childParser;
   }
 

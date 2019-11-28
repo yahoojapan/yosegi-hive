@@ -74,8 +74,12 @@ public class HiveListParser implements IHiveParser {
   @Override
   public IParser getParser( final int index ) throws IOException {
     if ( index < size() ) {
+      Object childRow = listObjectInspector.getListElement( row , index );
+      if ( childRow == null ) {
+        return new HiveNullParser();
+      }
       IHiveParser childParser = HiveParserFactory.get( childObjectInspector );
-      childParser.setObject( listObjectInspector.getListElement( row , index ) );
+      childParser.setObject( childRow );
       return childParser;
     } else {
       return new HiveNullParser();
