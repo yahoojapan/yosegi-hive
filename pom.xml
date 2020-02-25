@@ -16,7 +16,7 @@
 
   <groupId>jp.co.yahoo.yosegi</groupId>
   <artifactId>yosegi-hive</artifactId>
-  <version>0.9.4_hive-1.2.1000.2.6.4.0-91</version>
+  <version>0.9.5_hive-1.2.1000.2.6.4.0-91</version>
   <packaging>jar</packaging>
   <name>Yosegi Hive</name>
   <description>Yosegi Hive library.</description>
@@ -90,6 +90,12 @@
       <artifactId>hive-exec</artifactId>
       <version>1.2.1000.2.6.4.0-91</version>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>org.apache.hadoop</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
