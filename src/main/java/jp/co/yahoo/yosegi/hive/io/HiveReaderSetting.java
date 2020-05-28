@@ -37,6 +37,7 @@ import org.apache.hadoop.mapred.JobConf;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -102,8 +103,14 @@ public class HiveReaderSetting implements IReaderSetting {
       if ( props.containsKey( "yosegi.expand" ) ) {
         config.set( "spread.reader.expand.column" , props.getProperty( "yosegi.expand" ) );
       }
-      if ( props.containsKey( "yosegi.flatten" ) ) {
-        config.set( "spread.reader.flatten.column" , props.getProperty( "yosegi.flatten" ) );
+      Iterator<String> iterator = props.stringPropertyNames().iterator();
+      while ( iterator.hasNext() ) {
+        String keyName = iterator.next();
+        if ( keyName.startsWith( "yosegi.flatten" ) ) {
+          String yosegiKeyName = keyName.replace(
+              "yosegi.flatten" , "spread.reader.flatten.column" );
+          config.set( yosegiKeyName , props.getProperty( keyName ) );
+        }
       }
     }
 
