@@ -89,6 +89,19 @@ public class HiveReaderSetting implements IReaderSetting {
       mapWork = null;
     }
 
+    if (job.get("yosegi.expand") != null) {
+      config.set("spread.reader.expand.column", job.get("yosegi.expand"));
+    }
+    Iterator<Map.Entry<String,String>> jobConfIterator = job.iterator();
+    while ( jobConfIterator.hasNext() ) {
+      Map.Entry<String,String> keyValue = jobConfIterator.next();
+      if ( keyValue.getKey().startsWith( "yosegi.flatten" ) ) {
+        String yosegiKeyName = keyValue.getKey().replace(
+            "yosegi.flatten" , "spread.reader.flatten.column" );
+        config.set( yosegiKeyName , keyValue.getValue() );
+      }
+    }
+
     if ( mapWork == null ) {
       node = createExpressionNode( filterExprs );
       isVectorModeFlag = false;
@@ -96,23 +109,6 @@ public class HiveReaderSetting implements IReaderSetting {
     }
 
     node = createExpressionNode( filterExprs );
-
-    for ( Map.Entry<Path,PartitionDesc> pathsAndParts
-        : mapWork.getPathToPartitionInfo().entrySet() ) {
-      Properties props = pathsAndParts.getValue().getTableDesc().getProperties();
-      if ( props.containsKey( "yosegi.expand" ) ) {
-        config.set( "spread.reader.expand.column" , props.getProperty( "yosegi.expand" ) );
-      }
-      Iterator<String> iterator = props.stringPropertyNames().iterator();
-      while ( iterator.hasNext() ) {
-        String keyName = iterator.next();
-        if ( keyName.startsWith( "yosegi.flatten" ) ) {
-          String yosegiKeyName = keyName.replace(
-              "yosegi.flatten" , "spread.reader.flatten.column" );
-          config.set( yosegiKeyName , props.getProperty( keyName ) );
-        }
-      }
-    }
 
     config.set( "spread.reader.read.column.names" , createReadColumnNames(
         job.get( ColumnProjectionUtils.READ_COLUMN_NAMES_CONF_STR , null ) ) );
