@@ -1,4 +1,9 @@
-version: 2
+version: 2.1
+
+orbs:
+  sonatype: sonatype-nexus-community/circleci-maven-release-orb@0.0.16
+  sonatype-dryrun: sonatype-nexus-community/circleci-maven-release-orb@0.0.16
+
 jobs:
   build:
     docker:
@@ -40,16 +45,10 @@ jobs:
       - run: mvn clean package
 
       # Save JUnit result.
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/junit/
-            find . -type f -regex "./src/.*/target/surefire-reports/.*xml" -exec cp {} ~/junit/ \;
-          when: always
       - store_test_results:
-          path: ~/junit
+          path: target/surefire-reports
       - store_artifacts:
-          path: ~/junit     
+          path: target/surefire-reports
 
       # run site
       - run: mvn site
@@ -60,3 +59,46 @@ jobs:
 
       - store_artifacts:
           path: ~/site
+
+custom_filters:
+  merge_only: &merge_only
+    filters:
+      branches:
+        only: master
+  merge_ignore: &merge_ignore
+    filters:
+      branches:
+        ignore: master
+
+workflows:
+  build-and-test:
+    jobs:
+      - build:
+          <<: *merge_ignore
+  run-release:
+    jobs:
+      - build:
+          <<: *merge_only
+      - sonatype-dryrun/run-maven-release:
+          <<: *merge_only
+          requires:
+            - build
+          mvn-release-perform-command: |
+            mvn --batch-mode validate release:perform -DdryRun=true -s .circleci/.maven.xml
+          mvn-release-prepare-command: |
+            mvn --batch-mode validate release:prepare -DscmCommentPrefix="[skip ci][maven-release-plugin] " -DdryRun=true -s .circleci/.maven.xml
+          ssh-fingerprints: 8f:84:ee:04:fc:0d:6a:c3:53:e3:a6:d2:ce:71:f4:98
+      - approve:
+          type: approval
+          <<: *merge_only
+          requires:
+            - sonatype-dryrun/run-maven-release
+      - sonatype/run-maven-release:
+          <<: *merge_only
+          requires:
+            - approve
+          mvn-release-perform-command: |
+            mvn --batch-mode validate release:perform -s .circleci/.maven.xml
+          mvn-release-prepare-command: |
+            mvn --batch-mode validate release:prepare -DscmCommentPrefix="[skip ci][maven-release-plugin] " -s .circleci/.maven.xml
+          ssh-fingerprints: 8f:84:ee:04:fc:0d:6a:c3:53:e3:a6:d2:ce:71:f4:98
