@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -118,6 +119,26 @@ public class YosegiSerde extends AbstractSerDe {
     }
     String columnNameProperty = table.getProperty(serdeConstants.LIST_COLUMNS);
     String columnTypeProperty = table.getProperty(serdeConstants.LIST_COLUMN_TYPES);
+
+    conf.unset( "yosegi.expand" );
+    Iterator<Map.Entry<String,String>> jobConfIterator = conf.iterator();
+    while ( jobConfIterator.hasNext() ) {
+      Map.Entry<String,String> keyValue = jobConfIterator.next();
+      if ( keyValue.getKey().startsWith( "yosegi.flatten" ) ) {
+        conf.unset( keyValue.getKey() );
+      }
+    }
+
+    if ( table.containsKey( "yosegi.expand" ) ) {
+      conf.set("yosegi.expand", table.getProperty( "yosegi.expand" ));
+    }
+    Iterator<String> iterator = table.stringPropertyNames().iterator();
+    while ( iterator.hasNext() ) {
+      String keyName = iterator.next();
+      if ( keyName.startsWith( "yosegi.flatten" ) ) {
+        conf.set( keyName , table.getProperty( keyName ) );
+      }
+    }
 
     String projectionColumnNames =
         conf.get( ColumnProjectionUtils.READ_COLUMN_NAMES_CONF_STR , "" );
