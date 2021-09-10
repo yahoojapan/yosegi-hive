@@ -120,23 +120,25 @@ public class YosegiSerde extends AbstractSerDe {
     String columnNameProperty = table.getProperty(serdeConstants.LIST_COLUMNS);
     String columnTypeProperty = table.getProperty(serdeConstants.LIST_COLUMN_TYPES);
 
-    conf.unset( "yosegi.expand" );
+    conf.unset( "spread.reader.expand.column" );
     Iterator<Map.Entry<String,String>> jobConfIterator = conf.iterator();
     while ( jobConfIterator.hasNext() ) {
       Map.Entry<String,String> keyValue = jobConfIterator.next();
-      if ( keyValue.getKey().startsWith( "yosegi.flatten" ) ) {
+      if ( keyValue.getKey().startsWith( "spread.reader.flatten.column" ) ) {
         conf.unset( keyValue.getKey() );
       }
     }
 
     if ( table.containsKey( "yosegi.expand" ) ) {
-      conf.set("yosegi.expand", table.getProperty( "yosegi.expand" ));
+      conf.set("spread.reader.expand.column", table.getProperty( "yosegi.expand" ));
     }
     Iterator<String> iterator = table.stringPropertyNames().iterator();
     while ( iterator.hasNext() ) {
       String keyName = iterator.next();
       if ( keyName.startsWith( "yosegi.flatten" ) ) {
-        conf.set( keyName , table.getProperty( keyName ) );
+        String yosegiKeyName = keyName.replace(
+            "yosegi.flatten" , "spread.reader.flatten.column" );
+        conf.set( yosegiKeyName , table.getProperty( keyName ) );
       }
     }
 

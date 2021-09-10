@@ -89,23 +89,40 @@ public class HiveReaderSetting implements IReaderSetting {
       mapWork = null;
     }
 
-    if (job.get("yosegi.expand") != null) {
-      config.set("spread.reader.expand.column", job.get("yosegi.expand"));
-    }
-    Iterator<Map.Entry<String,String>> jobConfIterator = job.iterator();
-    while ( jobConfIterator.hasNext() ) {
-      Map.Entry<String,String> keyValue = jobConfIterator.next();
-      if ( keyValue.getKey().startsWith( "yosegi.flatten" ) ) {
-        String yosegiKeyName = keyValue.getKey().replace(
-            "yosegi.flatten" , "spread.reader.flatten.column" );
-        config.set( yosegiKeyName , keyValue.getValue() );
-      }
-    }
-
     if ( mapWork == null ) {
+      if (job.get("spread.reader.expand.column") != null) {
+        config.set("spread.reader.expand.column", job.get("spread.reader.expand.column"));
+      }
+      Iterator<Map.Entry<String,String>> jobConfIterator = job.iterator();
+      while ( jobConfIterator.hasNext() ) {
+        Map.Entry<String,String> keyValue = jobConfIterator.next();
+        if ( keyValue.getKey().startsWith( "spread.reader.flatten.column" ) ) {
+          config.set( keyValue.getKey() , keyValue.getValue() );
+        }
+      }
       node = createExpressionNode( filterExprs );
       isVectorModeFlag = false;
       return;
+    } else {
+      for ( Map.Entry<String,PartitionDesc> pathsAndParts
+          : mapWork.getPathToPartitionInfo().entrySet() ) {
+        if ( ! pathNameSet.contains( pathsAndParts.getKey() ) ) {
+          continue;
+        }
+        Properties props = pathsAndParts.getValue().getTableDesc().getProperties();
+        if ( props.containsKey( "yosegi.expand" ) ) {
+          config.set( "spread.reader.expand.column" , props.getProperty( "yosegi.expand" ) );
+        }
+        Iterator<String> iterator = props.stringPropertyNames().iterator();
+        while ( iterator.hasNext() ) {
+          String keyName = iterator.next();
+          if ( keyName.startsWith( "yosegi.flatten" ) ) {
+            String yosegiKeyName = keyName.replace(
+                "yosegi.flatten" , "spread.reader.flatten.column" );
+            config.set( yosegiKeyName , props.getProperty( keyName ) );
+          }
+        }
+      }
     }
 
     node = createExpressionNode( filterExprs );
