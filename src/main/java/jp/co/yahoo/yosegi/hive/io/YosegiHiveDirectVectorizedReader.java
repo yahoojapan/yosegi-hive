@@ -21,9 +21,7 @@ package jp.co.yahoo.yosegi.hive.io;
 import jp.co.yahoo.yosegi.hive.io.vector.IColumnVectorAssignor;
 import jp.co.yahoo.yosegi.reader.YosegiReader;
 import jp.co.yahoo.yosegi.spread.Spread;
-import jp.co.yahoo.yosegi.spread.expression.IExpressionIndex;
 import jp.co.yahoo.yosegi.spread.expression.IExpressionNode;
-import jp.co.yahoo.yosegi.spread.expression.IndexFactory;
 import jp.co.yahoo.yosegi.stats.SummaryStats;
 
 import org.apache.hadoop.hive.ql.exec.vector.VectorizedRowBatch;
@@ -51,7 +49,6 @@ public class YosegiHiveDirectVectorizedReader
   private final String[] columnNames;
 
   private boolean isEnd;
-  private IExpressionIndex currentIndexList;
   private int currentIndex;
   private int indexSize;
   private int readSpreadCount;
@@ -109,13 +106,8 @@ public class YosegiHiveDirectVectorizedReader
     }
     Spread spread = currentReader.next();
     readSpreadCount++;
-    if ( setting.isDisableFilterPushdown() ) {
-      currentIndexList = IndexFactory.toExpressionIndex( spread , null );
-    } else {
-      currentIndexList = IndexFactory.toExpressionIndex( spread , node.exec( spread ) );
-    }
   
-    indexSize = currentIndexList.size();
+    indexSize = spread.size();
     currentIndex = 0;
     if ( indexSize == 0 ) {
       return false;
@@ -167,7 +159,7 @@ public class YosegiHiveDirectVectorizedReader
 
     for ( int colIndex : needColumnIds ) {
       assignors[colIndex].setColumnVector(
-          outputBatch.cols[colIndex] , currentIndexList , currentIndex , maxSize );
+          outputBatch.cols[colIndex] , currentIndex , maxSize );
     }
     outputBatch.size = maxSize;
 

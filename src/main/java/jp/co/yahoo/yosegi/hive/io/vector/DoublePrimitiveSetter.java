@@ -31,11 +31,11 @@ public class DoublePrimitiveSetter implements IDecimalPrimitiveSetter {
 
   @Override
   public void set(
-      final PrimitiveObject[] primitiveObjectArray ,
+      final PrimitiveObject primitiveObject ,
       final DoubleColumnVector columnVector ,
       final int index ) throws IOException {
     try {
-      double doubleNumber = primitiveObjectArray[index].getDouble();
+      double doubleNumber = primitiveObject.getDouble();
       columnVector.vector[index] = doubleNumber;
     } catch ( NumberFormatException | NullPointerException ex ) {
       VectorizedBatchUtil.setNullColIsNullValue( columnVector , index );
