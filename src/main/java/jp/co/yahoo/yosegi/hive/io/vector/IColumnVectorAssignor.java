@@ -19,7 +19,6 @@
 package jp.co.yahoo.yosegi.hive.io.vector;
 
 import jp.co.yahoo.yosegi.spread.column.IColumn;
-import jp.co.yahoo.yosegi.spread.expression.IExpressionIndex;
 
 import org.apache.hadoop.hive.ql.exec.vector.ColumnVector;
 
@@ -31,7 +30,6 @@ public interface IColumnVectorAssignor {
 
   void setColumnVector(
       final ColumnVector vector ,
-      final IExpressionIndex indexList ,
       final int start ,
       final int length ) throws IOException;
 

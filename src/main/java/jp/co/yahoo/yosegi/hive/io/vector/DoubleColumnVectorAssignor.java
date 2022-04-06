@@ -20,7 +20,6 @@ package jp.co.yahoo.yosegi.hive.io.vector;
 
 import jp.co.yahoo.yosegi.message.objects.PrimitiveObject;
 import jp.co.yahoo.yosegi.spread.column.IColumn;
-import jp.co.yahoo.yosegi.spread.expression.IExpressionIndex;
 
 import org.apache.hadoop.hive.ql.exec.vector.ColumnVector;
 import org.apache.hadoop.hive.ql.exec.vector.DoubleColumnVector;
@@ -45,17 +44,15 @@ public class DoubleColumnVectorAssignor implements IColumnVectorAssignor {
   @Override
   public void setColumnVector(
       final ColumnVector vector ,
-      final IExpressionIndex indexList ,
       final int start ,
       final int length ) throws IOException {
     DoubleColumnVector columnVector = (DoubleColumnVector)vector;
-    PrimitiveObject[] primitiveObjectArray =
-        column.getPrimitiveObjectArray( indexList , start , length );
     for ( int i = 0 ; i < length ; i++ ) {
-      if ( primitiveObjectArray[i] == null ) {
+      PrimitiveObject primitiveObject = ColumnUtil.getPrimitiveObject( column , i + start );
+      if ( primitiveObject == null ) {
         VectorizedBatchUtil.setNullColIsNullValue( columnVector , i );
       } else {
-        setter.set( primitiveObjectArray , columnVector , i );
+        setter.set( primitiveObject , columnVector , i );
       }
     }
   }

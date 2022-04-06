@@ -32,8 +32,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import jp.co.yahoo.yosegi.spread.column.ColumnType;
 import jp.co.yahoo.yosegi.spread.column.IColumn;
 import jp.co.yahoo.yosegi.spread.column.PrimitiveColumn;
-import jp.co.yahoo.yosegi.spread.expression.AllExpressionIndex;
-import jp.co.yahoo.yosegi.spread.expression.IExpressionIndex;
 
 import org.apache.hadoop.hive.ql.exec.vector.*;
 
@@ -49,7 +47,6 @@ public class TestLongColumnVectorAssignor{
     for( int i = 0 ; i < 2000 ; i++ ){
       column.add( ColumnType.LONG , new LongObj( i ) , i );
     }
-    IExpressionIndex index = new AllExpressionIndex( column.size() );
 
     LongColumnVector vector = new LongColumnVector( 1024 );
     IColumnVectorAssignor assignor = new LongColumnVectorAssignor( LongPrimitiveSetter.getInstance() );
@@ -57,7 +54,7 @@ public class TestLongColumnVectorAssignor{
 
     for( int i = 0 ; i < 3 ; i++ ){
       int start = i * 1024;
-      assignor.setColumnVector( vector , index , start , 1024 );
+      assignor.setColumnVector( vector , start , 1024 );
       for( int n = 0 ; n < 1024 ; n++ ){
         if( ( n + start ) < 2000 ){
           assertEquals( vector.vector[n] , ( n + start ) );

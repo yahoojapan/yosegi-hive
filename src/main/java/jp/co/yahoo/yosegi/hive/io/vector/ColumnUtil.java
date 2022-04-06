@@ -19,32 +19,25 @@
 package jp.co.yahoo.yosegi.hive.io.vector;
 
 import jp.co.yahoo.yosegi.message.objects.PrimitiveObject;
-
-import org.apache.hadoop.hive.ql.exec.vector.LongColumnVector;
-import org.apache.hadoop.hive.ql.exec.vector.VectorizedBatchUtil;
+import jp.co.yahoo.yosegi.spread.column.IColumn;
 
 import java.io.IOException;
 
-public final class LongPrimitiveSetter implements INumberPrimitiveSetter {
+public final class ColumnUtil {
 
-  private static final LongPrimitiveSetter SETTER = new LongPrimitiveSetter();
 
-  private LongPrimitiveSetter() {}
+  private ColumnUtil() {}
 
-  @Override
-  public void set(
-      final PrimitiveObject primitiveObject ,
-      final LongColumnVector columnVector ,
-      final int index ) throws IOException {
-    try {
-      columnVector.vector[index] = primitiveObject.getLong();
-    } catch ( NumberFormatException | NullPointerException ex ) {
-      VectorizedBatchUtil.setNullColIsNullValue( columnVector , index );
+  /**
+   * Extracts the element of the specified index from the column as PrimitiveObject.
+   */
+  public static PrimitiveObject getPrimitiveObject(
+      final IColumn column , final int columnIndex ) throws IOException {
+    Object obj = column.get( columnIndex ).getRow();
+    if ( ! ( obj instanceof PrimitiveObject ) ) {
+      return null;
     }
-  }
-
-  public static LongPrimitiveSetter getInstance() {
-    return SETTER;
+    return (PrimitiveObject) obj;
   }
 
 }

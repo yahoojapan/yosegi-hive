@@ -34,8 +34,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import jp.co.yahoo.yosegi.spread.column.ColumnType;
 import jp.co.yahoo.yosegi.spread.column.IColumn;
 import jp.co.yahoo.yosegi.spread.column.PrimitiveColumn;
-import jp.co.yahoo.yosegi.spread.expression.AllExpressionIndex;
-import jp.co.yahoo.yosegi.spread.expression.IExpressionIndex;
 
 import org.apache.hadoop.hive.ql.exec.vector.*;
 
@@ -51,7 +49,6 @@ public class TestBytesColumnVectorAssignor{
     for( int i = 0 ; i < 2000 ; i++ ){
       column.add( ColumnType.BYTES , new BytesObj( Integer.toString( i ).getBytes() ) , i );
     }
-    IExpressionIndex index = new AllExpressionIndex( column.size() );
 
     BytesColumnVector vector = new BytesColumnVector( 1024 );
     IColumnVectorAssignor assignor = new BytesColumnVectorAssignor();
@@ -59,7 +56,7 @@ public class TestBytesColumnVectorAssignor{
 
     for( int i = 0 ; i < 3 ; i++ ){
       int start = i * 1024;
-      assignor.setColumnVector( vector , index , start , 1024 );
+      assignor.setColumnVector( vector , start , 1024 );
       for( int n = 0 ; n < 1024 ; n++ ){
         if( ( n + start ) < 2000 ){
           assertTrue( Arrays.equals( vector.vector[n] , Integer.toString( n + start ).getBytes() ) );
@@ -78,7 +75,6 @@ public class TestBytesColumnVectorAssignor{
       byte[] a = Integer.toString( i ).getBytes();
       column.add( ColumnType.BYTES , new Utf8BytesLinkObj( a , 0 , a.length ) , i );
     }
-    IExpressionIndex index = new AllExpressionIndex( column.size() );
 
     BytesColumnVector vector = new BytesColumnVector( 1024 );
     IColumnVectorAssignor assignor = new BytesColumnVectorAssignor();
@@ -86,7 +82,7 @@ public class TestBytesColumnVectorAssignor{
 
     for( int i = 0 ; i < 3 ; i++ ){
       int start = i * 1024;
-      assignor.setColumnVector( vector , index , start , 1024 );
+      assignor.setColumnVector( vector , start , 1024 );
       for( int n = 0 ; n < 1024 ; n++ ){
         if( ( n + start ) < 2000 ){
           assertTrue( Arrays.equals( vector.vector[n] , Integer.toString( n + start ).getBytes() ) );
