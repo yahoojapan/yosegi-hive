@@ -109,22 +109,21 @@ public class YosegiHiveLineReader implements RecordReader<NullWritable, ColumnAn
   }
 
   private boolean nextReader() throws IOException {
-    if ( ! reader.hasNext() ) {
-      currentSpread = null;
+    while (true) {
+      if (!reader.hasNext()) {
+        currentSpread = null;
+        currentIndex = 0;
+        return false;
+      }
+      currentSpread = reader.next();
+      readSpreadCount++;
+      if (currentSpread.size() == 0) {
+        continue;
+      }
+      spreadCounter.increment();
       currentIndex = 0;
-      return false;
+      return true;
     }
-    currentSpread = reader.next();
-    readSpreadCount++;
-    if ( currentSpread.size() == 0 ) {
-      return nextReader();
-    }
-    spreadCounter.increment();
-    currentIndex = 0;
-    if ( currentSpread.size() == 0 ) {
-      return nextReader();
-    }
-    return true;
   }
 
   @Override
