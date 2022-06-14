@@ -112,28 +112,29 @@ public class YosegiHiveLineReader implements RecordReader<NullWritable, ColumnAn
   }
 
   private boolean nextReader() throws IOException {
-    if ( ! reader.hasNext() ) {
-      currentSpread = null;
+    while (true) {
+      if (!reader.hasNext()) {
+        currentSpread = null;
+        currentIndex = 0;
+        return false;
+      }
+      currentSpread = reader.next();
+      readSpreadCount++;
+      if (currentSpread.size() == 0) {
+        continue;
+      }
+      spreadCounter.increment();
+      if (setting.isDisableFilterPushdown()) {
+        currentIndexList = IndexFactory.toExpressionIndex(currentSpread, null);
+      } else {
+        currentIndexList = IndexFactory.toExpressionIndex(currentSpread, node.exec(currentSpread));
+      }
       currentIndex = 0;
-      return false;
+      if (currentIndexList.size() == 0) {
+        continue;
+      }
+      return true;
     }
-    currentSpread = reader.next();
-    readSpreadCount++;
-    if ( currentSpread.size() == 0 ) {
-      return nextReader();
-    }
-    spreadCounter.increment();
-    if ( setting.isDisableFilterPushdown() ) {
-      currentIndexList = IndexFactory.toExpressionIndex( currentSpread , null );
-    } else {
-      currentIndexList =
-          IndexFactory.toExpressionIndex( currentSpread , node.exec( currentSpread ) );
-    }
-    currentIndex = 0;
-    if ( currentIndexList.size() == 0 ) {
-      return nextReader();
-    }
-    return true;
   }
 
   @Override

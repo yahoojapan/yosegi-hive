@@ -73,7 +73,7 @@ public class HiveReaderSetting implements IReaderSetting {
     config = new Configuration();
 
     disableSkipBlock = job.getBoolean( "yosegi.disable.block.skip" , false );
-    disableFilterPushdown = job.getBoolean( "yosegi.disable.filter.pushdown" , true );
+    disableFilterPushdown = job.getBoolean( "yosegi.disable.filter.pushdown" , false );
 
     Set<String> pathNameSet = createPathSet( split.getPath() );
     List<ExprNodeGenericFuncDesc> filterExprs = new ArrayList<ExprNodeGenericFuncDesc>();
