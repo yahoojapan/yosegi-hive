@@ -32,13 +32,12 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import jp.co.yahoo.yosegi.reader.YosegiReader;
 import jp.co.yahoo.yosegi.spread.Spread;
 import jp.co.yahoo.yosegi.spread.column.IColumn;
-import jp.co.yahoo.yosegi.spread.expression.AllExpressionIndex;
-import jp.co.yahoo.yosegi.spread.expression.IExpressionIndex;
 
 import jp.co.yahoo.yosegi.config.Configuration;
 import jp.co.yahoo.yosegi.message.parser.*;
 import jp.co.yahoo.yosegi.message.parser.json.*;
 import jp.co.yahoo.yosegi.message.objects.*;
+import jp.co.yahoo.yosegi.hive.io.vector.ColumnUtil;
 
 import jp.co.yahoo.yosegi.*;
 
@@ -69,16 +68,14 @@ public class TestYosegiHiveRecordWriter{
     while( reader.hasNext() ){
       Spread spread = reader.next();
       IColumn key1Column = spread.getColumn( "key1" );
-      IExpressionIndex indexList = new AllExpressionIndex( spread.size() );
-      PrimitiveObject[] primitiveArray = key1Column.getPrimitiveObjectArray( indexList , 0 , spread.size() );
-      assertEquals( 7 , primitiveArray.length );
-      assertEquals( "a" , primitiveArray[0].getString() );
-      assertEquals( "b" , primitiveArray[1].getString() );
-      assertEquals( "a" , primitiveArray[2].getString() );
-      assertEquals( "b" , primitiveArray[3].getString() );
-      assertEquals( "a" , primitiveArray[4].getString() );
-      assertEquals( "b" , primitiveArray[5].getString() );
-      assertEquals( "a" , primitiveArray[6].getString() );
+      assertEquals( 7 , key1Column.size() );
+      assertEquals( "a" , ColumnUtil.getPrimitiveObject( key1Column , 0 ).getString() );
+      assertEquals( "b" , ColumnUtil.getPrimitiveObject( key1Column , 1 ).getString() );
+      assertEquals( "a" , ColumnUtil.getPrimitiveObject( key1Column , 2 ).getString() );
+      assertEquals( "b" , ColumnUtil.getPrimitiveObject( key1Column , 3 ).getString() );
+      assertEquals( "a" , ColumnUtil.getPrimitiveObject( key1Column , 4 ).getString() );
+      assertEquals( "b" , ColumnUtil.getPrimitiveObject( key1Column , 5 ).getString() );
+      assertEquals( "a" , ColumnUtil.getPrimitiveObject( key1Column , 6 ).getString() );
     }
   }
 

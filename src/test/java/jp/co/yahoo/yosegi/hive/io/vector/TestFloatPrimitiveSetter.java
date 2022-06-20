@@ -32,8 +32,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import jp.co.yahoo.yosegi.spread.column.ColumnType;
 import jp.co.yahoo.yosegi.spread.column.IColumn;
 import jp.co.yahoo.yosegi.spread.column.PrimitiveColumn;
-import jp.co.yahoo.yosegi.spread.expression.AllExpressionIndex;
-import jp.co.yahoo.yosegi.spread.expression.IExpressionIndex;
 
 import org.apache.hadoop.hive.ql.exec.vector.*;
 
@@ -49,15 +47,14 @@ public class TestFloatPrimitiveSetter{
     for( int i = 0 ; i < 2000 ; i++ ){
       column.add( ColumnType.FLOAT , new FloatObj( (float)i/(float)1000 ) , i );
     }
-    IExpressionIndex index = new AllExpressionIndex( column.size() );
 
     IDecimalPrimitiveSetter setter = FloatPrimitiveSetter.getInstance();
     for( int i = 0 ; i < 3 ; i++ ){
       int start = i * 1024;
-      PrimitiveObject[] pArray = column.getPrimitiveObjectArray( index , start , 1024 );
       DoubleColumnVector vector = new DoubleColumnVector( 1024 );
       for( int n = 0 ; n < 1024 ; n++ ){
-        setter.set( pArray , vector , n );
+        PrimitiveObject primitiveObject = ColumnUtil.getPrimitiveObject( column , start + n );
+        setter.set( primitiveObject , vector , n );
       } 
       for( int n = 0 ; n < 1024 ; n++ ){
         if( ( n + start ) < 2000 ){

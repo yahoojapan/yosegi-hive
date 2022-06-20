@@ -31,11 +31,11 @@ public class IntegerPrimitiveSetter implements INumberPrimitiveSetter {
 
   @Override
   public void set(
-      final PrimitiveObject[] primitiveObjectArray ,
+      final PrimitiveObject primitiveObject ,
       final LongColumnVector columnVector ,
       final int index ) throws IOException {
     try {
-      long longNumber = (long)( primitiveObjectArray[index].getInt() );
+      long longNumber = (long)( primitiveObject.getInt() );
       columnVector.vector[index] = longNumber;
     } catch ( NumberFormatException | NullPointerException ex ) {
       VectorizedBatchUtil.setNullColIsNullValue( columnVector , index );
