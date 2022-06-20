@@ -27,7 +27,7 @@ import java.io.IOException;
 public interface IDecimalPrimitiveSetter {
 
   void set(
-      final PrimitiveObject[] primitiveObjectArray ,
+      final PrimitiveObject primitiveObject ,
       final DoubleColumnVector columnVector ,
       final int index ) throws IOException;
 

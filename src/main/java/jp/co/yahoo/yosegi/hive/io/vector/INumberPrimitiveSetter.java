@@ -27,7 +27,7 @@ import java.io.IOException;
 public interface INumberPrimitiveSetter {
 
   void set(
-      final PrimitiveObject[] primitiveObjectArray ,
+      final PrimitiveObject primitiveObject ,
       final LongColumnVector columnVector ,
       final int index ) throws IOException;
 

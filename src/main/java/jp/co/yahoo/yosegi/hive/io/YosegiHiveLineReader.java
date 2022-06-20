@@ -21,9 +21,7 @@ package jp.co.yahoo.yosegi.hive.io;
 import jp.co.yahoo.yosegi.reader.YosegiReader;
 import jp.co.yahoo.yosegi.spread.Spread;
 import jp.co.yahoo.yosegi.spread.column.SpreadColumn;
-import jp.co.yahoo.yosegi.spread.expression.IExpressionIndex;
 import jp.co.yahoo.yosegi.spread.expression.IExpressionNode;
-import jp.co.yahoo.yosegi.spread.expression.IndexFactory;
 import jp.co.yahoo.yosegi.stats.SummaryStats;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapred.RecordReader;
@@ -47,7 +45,6 @@ public class YosegiHiveLineReader implements RecordReader<NullWritable, ColumnAn
 
   private Spread currentSpread;
   private int currentIndex;
-  private IExpressionIndex currentIndexList;
   private boolean isEnd;
   private int readSpreadCount;
 
@@ -124,22 +121,14 @@ public class YosegiHiveLineReader implements RecordReader<NullWritable, ColumnAn
         continue;
       }
       spreadCounter.increment();
-      if (setting.isDisableFilterPushdown()) {
-        currentIndexList = IndexFactory.toExpressionIndex(currentSpread, null);
-      } else {
-        currentIndexList = IndexFactory.toExpressionIndex(currentSpread, node.exec(currentSpread));
-      }
       currentIndex = 0;
-      if (currentIndexList.size() == 0) {
-        continue;
-      }
       return true;
     }
   }
 
   @Override
   public boolean next( final NullWritable key, final ColumnAndIndex value ) throws IOException {
-    if ( currentSpread == null || currentIndex == currentIndexList.size() ) {
+    if ( currentSpread == null || currentIndex == currentSpread.size() ) {
       if ( ! nextReader() ) {
         updateCounter( reader.getReadStats() );
         isEnd = true;
@@ -149,7 +138,7 @@ public class YosegiHiveLineReader implements RecordReader<NullWritable, ColumnAn
 
     spreadColumn.setSpread( currentSpread );
     value.column = spreadColumn;
-    value.index =  currentIndexList.get( currentIndex );
+    value.index =  currentIndex;
     value.columnIndex = spreadCounter.get();
     currentIndex++;
     return true;

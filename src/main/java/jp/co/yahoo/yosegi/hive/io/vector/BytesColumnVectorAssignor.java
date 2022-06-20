@@ -21,7 +21,6 @@ package jp.co.yahoo.yosegi.hive.io.vector;
 import jp.co.yahoo.yosegi.message.objects.IBytesLink;
 import jp.co.yahoo.yosegi.message.objects.PrimitiveObject;
 import jp.co.yahoo.yosegi.spread.column.IColumn;
-import jp.co.yahoo.yosegi.spread.expression.IExpressionIndex;
 
 import org.apache.hadoop.hive.ql.exec.vector.BytesColumnVector;
 import org.apache.hadoop.hive.ql.exec.vector.ColumnVector;
@@ -41,24 +40,22 @@ public class BytesColumnVectorAssignor implements IColumnVectorAssignor {
   @Override
   public void setColumnVector(
       final ColumnVector vector ,
-      final IExpressionIndex indexList ,
       final int start ,
       final int length ) throws IOException {
     BytesColumnVector columnVector = (BytesColumnVector)vector;
 
-    PrimitiveObject[] primitiveObjectArray =
-        column.getPrimitiveObjectArray( indexList , start , length );
     for ( int i = 0 ; i < length ; i++ ) {
-      if ( primitiveObjectArray[i] == null ) {
+      PrimitiveObject primitiveObject = ColumnUtil.getPrimitiveObject( column , i + start );
+      if ( primitiveObject == null ) {
         VectorizedBatchUtil.setNullColIsNullValue( columnVector , i );
       } else {
-        if ( primitiveObjectArray[i] instanceof IBytesLink ) {
-          IBytesLink linkObj = (IBytesLink)primitiveObjectArray[i];
+        if ( primitiveObject instanceof IBytesLink ) {
+          IBytesLink linkObj = (IBytesLink)primitiveObject;
           columnVector.vector[i] = linkObj.getLinkBytes();
           columnVector.start[i] = linkObj.getStart();
           columnVector.length[i] = linkObj.getLength();
         } else {
-          byte[] strBytes = primitiveObjectArray[i].getBytes();
+          byte[] strBytes = primitiveObject.getBytes();
           if ( strBytes == null ) {
             VectorizedBatchUtil.setNullColIsNullValue( columnVector , i );
           } else {
