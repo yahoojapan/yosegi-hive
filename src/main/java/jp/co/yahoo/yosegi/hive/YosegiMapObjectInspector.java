@@ -131,6 +131,9 @@ public class YosegiMapObjectInspector implements SettableMapObjectInspector {
       return getField.get( childColumn , columnAndIndex.index , columnAndIndex.columnIndex );
     } else {
       Map map = (Map)object;
+      if ( map == null ) {
+        return null;
+      }
       return map.get( key.toString() );
     }
   }
@@ -154,6 +157,9 @@ public class YosegiMapObjectInspector implements SettableMapObjectInspector {
 
   @Override
   public int getMapSize( final Object object ) {
+    if ( object == null ) {
+      return 0;
+    }
     return ((Map)object).size();
   }
 
