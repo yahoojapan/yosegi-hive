@@ -128,7 +128,11 @@ public class YosegiListObjectInspector implements SettableListObjectInspector {
         return null;
       }
     } else {
-      return ( (List)object ).get( index );
+      if ( index < getListLength( object ) ) {
+        return ( (List)object ).get( index );
+      } else {
+        return null;
+      }
     }
   }
 

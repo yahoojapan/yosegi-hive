@@ -109,6 +109,9 @@ public final class CreateExtractNodeUtil {
         .getWritableConstantValue().toString() );
 
     IExtractNode parentExtraNode = getExtractNode( columnDesc );
+    if ( parentExtraNode == null ) {
+      return null;
+    }
 
     parentExtraNode.pushChild( childExtraNode );
 
