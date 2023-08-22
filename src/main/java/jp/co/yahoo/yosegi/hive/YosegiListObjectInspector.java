@@ -23,6 +23,7 @@ import jp.co.yahoo.yosegi.hive.io.PrimitiveToWritableConverter;
 import jp.co.yahoo.yosegi.spread.column.ArrayCell;
 import jp.co.yahoo.yosegi.spread.column.ColumnType;
 import jp.co.yahoo.yosegi.spread.column.ICell;
+import jp.co.yahoo.yosegi.spread.column.IColumn;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.SettableListObjectInspector;
@@ -85,8 +86,14 @@ public class YosegiListObjectInspector implements SettableListObjectInspector {
     public Object get(
         final ColumnAndIndex columnAndIndex , final ArrayCell arrayCell , final int index ) {
       int targetIndex = arrayCell.getStart() + index;
+      IColumn targetColumn;
+      if ( columnAndIndex.column.getColumnType() == ColumnType.UNION ) {
+        targetColumn = columnAndIndex.column.getColumn( ColumnType.ARRAY ).getColumn(0);
+      } else {
+        targetColumn = columnAndIndex.column.getColumn(0);
+      }
       return new ColumnAndIndex(
-          columnAndIndex.column.getColumn(0) , targetIndex , columnAndIndex.columnIndex );
+          targetColumn , targetIndex , columnAndIndex.columnIndex );
     }
   }
 
