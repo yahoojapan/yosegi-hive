@@ -20,6 +20,7 @@ package jp.co.yahoo.yosegi.hive;
 
 import jp.co.yahoo.yosegi.hive.io.ColumnAndIndex;
 import jp.co.yahoo.yosegi.hive.io.PrimitiveToWritableConverter;
+import jp.co.yahoo.yosegi.spread.column.ColumnType;
 import jp.co.yahoo.yosegi.spread.column.IColumn;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
@@ -127,6 +128,11 @@ public class YosegiMapObjectInspector implements SettableMapObjectInspector {
   public Object getMapValueElement( final Object object, final Object key ) {
     if ( object instanceof ColumnAndIndex ) {
       ColumnAndIndex columnAndIndex = (ColumnAndIndex) object;
+      if (columnAndIndex.column.getColumnType() == ColumnType.UNION) {
+        IColumn targetColumn = columnAndIndex.column.getColumn(ColumnType.SPREAD);
+        columnAndIndex =
+            new ColumnAndIndex(targetColumn, columnAndIndex.index, columnAndIndex.columnIndex);
+      }
       IColumn childColumn = columnAndIndex.column.getColumn( key.toString() );
       return getField.get( childColumn , columnAndIndex.index , columnAndIndex.columnIndex );
     } else {
@@ -142,12 +148,18 @@ public class YosegiMapObjectInspector implements SettableMapObjectInspector {
   public Map<?, ?> getMap( final Object object ) {
     if ( object instanceof ColumnAndIndex ) {
       ColumnAndIndex columnAndIndex = (ColumnAndIndex) object;
+      if (columnAndIndex.column.getColumnType() == ColumnType.UNION) {
+        IColumn targetColumn = columnAndIndex.column.getColumn(ColumnType.SPREAD);
+        columnAndIndex =
+            new ColumnAndIndex(targetColumn, columnAndIndex.index, columnAndIndex.columnIndex);
+      }
       int childColumnSize = columnAndIndex.column.getColumnSize();
       Map<Object,Object> result = new HashMap<Object, Object>( childColumnSize );
       for ( int i = 0 ; i < childColumnSize ; i++ ) {
         IColumn childColumn = columnAndIndex.column.getColumn(i);
-        result.put( childColumn.getColumnName() ,
-            getField.get( childColumn , columnAndIndex.index , columnAndIndex.columnIndex ) );
+        Object value =
+            getField.get( childColumn , columnAndIndex.index , columnAndIndex.columnIndex );
+        result.put(childColumn.getColumnName(), value);
       }
       return result;
     } else {
