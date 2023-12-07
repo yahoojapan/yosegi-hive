@@ -81,6 +81,8 @@ public class HiveReaderSetting implements IReaderSetting {
     if ( filterExprSerialized != null ) {
       filterExprs.add( Utilities.deserializeExpression(filterExprSerialized) );
     }
+    config.set( "spread.reader.read.column.names" , createReadColumnNames(
+        job.get( ColumnProjectionUtils.READ_COLUMN_NAMES_CONF_STR , null ) ) );
 
     MapWork mapWork;
     try {
@@ -126,9 +128,6 @@ public class HiveReaderSetting implements IReaderSetting {
     }
 
     node = createExpressionNode( filterExprs );
-
-    config.set( "spread.reader.read.column.names" , createReadColumnNames(
-        job.get( ColumnProjectionUtils.READ_COLUMN_NAMES_CONF_STR , null ) ) );
 
     // Next Hive vesion;
     // Utilities.getUseVectorizedInputFileFormat(job)
