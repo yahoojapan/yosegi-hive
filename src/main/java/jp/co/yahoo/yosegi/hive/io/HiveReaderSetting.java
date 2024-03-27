@@ -21,6 +21,7 @@ package jp.co.yahoo.yosegi.hive.io;
 import jp.co.yahoo.yosegi.config.Configuration;
 import jp.co.yahoo.yosegi.hive.pushdown.HiveExprOrNode;
 import jp.co.yahoo.yosegi.spread.expression.IExpressionNode;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.ql.exec.Operator;
 import org.apache.hadoop.hive.ql.exec.TableScanOperator;
@@ -94,12 +95,22 @@ public class HiveReaderSetting implements IReaderSetting {
     if ( mapWork == null ) {
       if (job.get("spread.reader.expand.column") != null) {
         config.set("spread.reader.expand.column", job.get("spread.reader.expand.column"));
+      } else if ( job.get( "yosegi.expand" ) != null ) {
+        config.set(
+            "spread.reader.expand.column" ,
+            StringEscapeUtils.unescapeJava( job.get( "yosegi.expand" ) ) );
       }
       Iterator<Map.Entry<String,String>> jobConfIterator = job.iterator();
       while ( jobConfIterator.hasNext() ) {
         Map.Entry<String,String> keyValue = jobConfIterator.next();
         if ( keyValue.getKey().startsWith( "spread.reader.flatten.column" ) ) {
           config.set( keyValue.getKey() , keyValue.getValue() );
+        } else if ( keyValue.getKey().startsWith( "yosegi.flatten" ) ) {
+          String yosegiKeyName = keyValue.getKey().replace(
+                "yosegi.flatten" , "spread.reader.flatten.column" );
+          config.set(
+              yosegiKeyName ,
+              StringEscapeUtils.unescapeJava( keyValue.getValue() ) );
         }
       }
       node = createExpressionNode( filterExprs );
