@@ -58,6 +58,10 @@ public final class YosegiObjectInspectorFactory {
         switch ( primitiveTypeInfo.getPrimitiveCategory() ) {
           case STRING:
             return PrimitiveObjectInspectorFactory.writableStringObjectInspector;
+          case CHAR:
+            return PrimitiveObjectInspectorFactory.writableHiveCharObjectInspector;
+          case VARCHAR:
+            return PrimitiveObjectInspectorFactory.writableHiveVarcharObjectInspector;
           case BINARY:
             return PrimitiveObjectInspectorFactory.writableBinaryObjectInspector;
           case BOOLEAN:
@@ -74,10 +78,12 @@ public final class YosegiObjectInspectorFactory {
             return PrimitiveObjectInspectorFactory.writableLongObjectInspector;
           case SHORT:
             return PrimitiveObjectInspectorFactory.writableShortObjectInspector;
-
-          case DATE:
-          case DECIMAL:
           case TIMESTAMP:
+            return PrimitiveObjectInspectorFactory.writableTimestampObjectInspector;
+          case DATE:
+            return PrimitiveObjectInspectorFactory.writableDateObjectInspector;
+
+          case DECIMAL:
           case VOID:
           default:
             throw new UnsupportedOperationException(

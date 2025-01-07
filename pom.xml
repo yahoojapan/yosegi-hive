@@ -15,7 +15,7 @@
 
   <groupId>jp.co.yahoo.yosegi</groupId>
   <artifactId>yosegi-hive</artifactId>
-  <version>2.0.7_hive-1.2.1000.2.6.4.0-91-SNAPSHOT</version>
+  <version>2.0.0_hive-2.3.9-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Yosegi Hive</name>
   <description>Yosegi Hive library.</description>
@@ -54,8 +54,6 @@
   </developers>
 
   <properties>
-    <configlibVersion>1.2.1.1</configlibVersion>
-    <schemalibVersion>1.2.4_hive-1.2.1000.2.6.4.0-91</schemalibVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <target_jdk_version>1.8</target_jdk_version>
     <maven-surefire-plugin.version>3.0.0-M2</maven-surefire-plugin.version>
@@ -64,6 +62,8 @@
     <buildtype>test</buildtype>
     <spotbugs-maven-plugin.version>3.1.8</spotbugs-maven-plugin.version>
     <spotbugs.version>3.1.9</spotbugs.version>
+    <hive.base>2.3</hive.base>
+    <hive.version>${hive.base}.9</hive.version>
   </properties>
 
   <distributionManagement>
@@ -87,7 +87,7 @@
     <dependency>
       <groupId>org.apache.hive</groupId>
       <artifactId>hive-exec</artifactId>
-      <version>1.2.1000.2.6.4.0-91</version>
+      <version>${hive.version}</version>
       <optional>true</optional>
       <exclusions>
         <exclusion>
@@ -106,7 +106,7 @@
     <dependency>
       <groupId>jp.co.yahoo.yosegi</groupId>
       <artifactId>yosegi</artifactId>
-      <version>2.0.2</version>
+      <version>2.0.9</version>
     </dependency>
     <dependency>
       <groupId>jp.co.yahoo.yosegi</groupId>
@@ -217,6 +217,7 @@
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
           <excludes>
+            <exclude>jars/**/*</exclude>
             <exclude>**/*.json</exclude>
             <exclude>**/*.txt</exclude>
             <exclude>**/*.template</exclude>
@@ -253,8 +254,8 @@
         <version>2.5.3</version>
         <configuration>
           <releaseProfiles>gpg-sign</releaseProfiles>
-          <releaseVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}_hive-1.2.1000.2.6.4.0-91</releaseVersion>
-          <developmentVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}_hive-1.2.1000.2.6.4.0-91-SNAPSHOT</developmentVersion>
+          <releaseVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}_hive-${hive.version}</releaseVersion>
+          <developmentVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}_hive-${hive.version}-SNAPSHOT</developmentVersion>
         </configuration>
       </plugin>
       <plugin>

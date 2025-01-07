@@ -64,11 +64,11 @@ custom_filters:
   merge_only: &merge_only
     filters:
       branches:
-        only: hive-1.2.1000.2.6.4.0-91
+        only: hive-2.3.9
   merge_ignore: &merge_ignore
     filters:
       branches:
-        ignore: hive-1.2.1000.2.6.4.0-91
+        ignore: hive-2.3.9
 
 workflows:
   build-and-test:

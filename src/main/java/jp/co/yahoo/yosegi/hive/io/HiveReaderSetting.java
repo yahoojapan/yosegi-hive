@@ -23,8 +23,7 @@ import jp.co.yahoo.yosegi.hive.pushdown.HiveExprOrNode;
 import jp.co.yahoo.yosegi.spread.expression.IExpressionNode;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hive.ql.exec.Operator;
-import org.apache.hadoop.hive.ql.exec.TableScanOperator;
+import org.apache.hadoop.hive.ql.exec.SerializationUtilities;
 import org.apache.hadoop.hive.ql.exec.Utilities;
 import org.apache.hadoop.hive.ql.plan.ExprNodeGenericFuncDesc;
 import org.apache.hadoop.hive.ql.plan.MapWork;
@@ -34,7 +33,6 @@ import org.apache.hadoop.hive.serde2.ColumnProjectionUtils;
 import org.apache.hadoop.mapred.FileSplit;
 import org.apache.hadoop.mapred.JobConf;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -76,11 +74,10 @@ public class HiveReaderSetting implements IReaderSetting {
     disableSkipBlock = job.getBoolean( "yosegi.disable.block.skip" , false );
     disableFilterPushdown = job.getBoolean( "yosegi.disable.filter.pushdown" , false );
 
-    Set<String> pathNameSet = createPathSet( split.getPath() );
     List<ExprNodeGenericFuncDesc> filterExprs = new ArrayList<ExprNodeGenericFuncDesc>();
     String filterExprSerialized = job.get( TableScanDesc.FILTER_EXPR_CONF_STR );
     if ( filterExprSerialized != null ) {
-      filterExprs.add( Utilities.deserializeExpression(filterExprSerialized) );
+      filterExprs.add( SerializationUtilities.deserializeExpression( filterExprSerialized ) );
     }
     config.set( "spread.reader.read.column.names" , createReadColumnNames(
         job.get( ColumnProjectionUtils.READ_COLUMN_NAMES_CONF_STR , null ) ) );
@@ -117,11 +114,8 @@ public class HiveReaderSetting implements IReaderSetting {
       isVectorModeFlag = false;
       return;
     } else {
-      for ( Map.Entry<String,PartitionDesc> pathsAndParts
+      for ( Map.Entry<Path,PartitionDesc> pathsAndParts
           : mapWork.getPathToPartitionInfo().entrySet() ) {
-        if ( ! pathNameSet.contains( pathsAndParts.getKey() ) ) {
-          continue;
-        }
         Properties props = pathsAndParts.getValue().getTableDesc().getProperties();
         if ( props.containsKey( "yosegi.expand" ) ) {
           config.set( "spread.reader.expand.column" , props.getProperty( "yosegi.expand" ) );
@@ -140,9 +134,7 @@ public class HiveReaderSetting implements IReaderSetting {
 
     node = createExpressionNode( filterExprs );
 
-    // Next Hive vesion;
-    // Utilities.getUseVectorizedInputFileFormat(job)
-    isVectorModeFlag = Utilities.isVectorMode( job );
+    isVectorModeFlag = Utilities.getUseVectorizedInputFileFormat( job );
   }
 
   /**
