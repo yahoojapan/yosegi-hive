@@ -294,14 +294,6 @@
 
   <repositories>
     <repository>
-      <id>hdp</id>
-      <url> http://repo.hortonworks.com/content/repositories/releases</url>
-      <name>HDP</name>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
       <id>spring</id>
       <url>http://repo.spring.io/plugins-release/</url>
       <name>SPRING</name>
