@@ -67,7 +67,7 @@ public class TestHiveReaderSetting{
   public void T_createReadColumnNames_2(){
     HiveReaderSetting setting = new HiveReaderSetting( null , null , false , false , false );
     String readColumnJson = setting.createReadColumnNames( "" );
-    assertEquals( readColumnJson , null );
+    assertEquals( readColumnJson , "[]" );
   }
 
   @Test

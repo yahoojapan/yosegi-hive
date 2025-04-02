@@ -300,14 +300,6 @@
 
   <repositories>
     <repository>
-      <id>hdp</id>
-      <url> http://repo.hortonworks.com/content/repositories/releases</url>
-      <name>HDP</name>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
       <id>pentaho</id>
       <url>https://repo.orl.eng.hitachivantara.com/artifactory/pnt-mvn/</url>
       <name>PENTAHO</name>
