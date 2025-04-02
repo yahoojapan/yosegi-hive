@@ -134,7 +134,10 @@ public class YosegiMapObjectInspector implements SettableMapObjectInspector {
             new ColumnAndIndex(targetColumn, columnAndIndex.index, columnAndIndex.columnIndex);
       }
       IColumn childColumn = columnAndIndex.column.getColumn( key.toString() );
-      return getField.get( childColumn , columnAndIndex.index , columnAndIndex.columnIndex );
+      return getField.get(
+          childColumn ,
+          columnAndIndex.index ,
+          columnAndIndex.column.getChildColumnIndex( childColumn.getColumnName() ) );
     } else {
       Map map = (Map)object;
       if ( map == null ) {
@@ -158,7 +161,7 @@ public class YosegiMapObjectInspector implements SettableMapObjectInspector {
       for ( int i = 0 ; i < childColumnSize ; i++ ) {
         IColumn childColumn = columnAndIndex.column.getColumn(i);
         Object value =
-            getField.get( childColumn , columnAndIndex.index , columnAndIndex.columnIndex );
+            getField.get( childColumn , columnAndIndex.index , i );
         result.put(childColumn.getColumnName(), value);
       }
       return result;
