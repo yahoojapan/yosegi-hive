@@ -117,7 +117,7 @@ public class HiveReaderSetting implements IReaderSetting {
    * Create the setting of the column to be read by Yosegi.
    */
   public String createReadColumnNames( final String readColumnNames ) {
-    if ( readColumnNames == null || readColumnNames.isEmpty() ) {
+    if ( readColumnNames == null ) {
       return null;
     }
     StringBuilder jsonStringBuilder = new StringBuilder();
